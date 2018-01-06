@@ -41,7 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         mTasks = pTasks;
         mRecyclerView = pRecyclerView;
     }
-    
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
 
@@ -101,19 +101,21 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         DatabaseHelper db = new DatabaseHelper(mContext);
         Tasks task;
+try {
+    int positionToDelete = getRowPosition(v);
 
-        int positionToDelete = getRowPosition(v);
+    task = mTasks.get(positionToDelete);
+    mTasks.remove(positionToDelete);
 
-        task = mTasks.get(positionToDelete);
-        mTasks.remove(positionToDelete);
+    db.deleteTask(task);
 
-        db.deleteTask(task);
+    Toast.makeText(mContext, "Task \"" + task.getTask() + "\" has been deleted", Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(mContext, "Task \"" + task.getTask() + "\" has been deleted", Toast.LENGTH_SHORT).show();
-
-        notifyItemRemoved(positionToDelete);
-        notifyDataSetChanged();
-
+    notifyItemRemoved(positionToDelete);
+    notifyDataSetChanged();
+}catch (IndexOutOfBoundsException e){
+    Toast.makeText(mContext, "cos nie tak " , Toast.LENGTH_SHORT).show();
+}
     }
 }
 

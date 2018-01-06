@@ -2,7 +2,6 @@ package com.example.shin.todomenagerv1
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,13 +14,11 @@ import org.jetbrains.anko.find
 class MainActivity : AppCompatActivity() {
 
     var task: Tasks = Tasks()
-    lateinit var card : CardView
 
     lateinit var btnAddTask: Button
     lateinit var tasks: ArrayList<Tasks>
     private lateinit var edtAddTask: EditText
     private lateinit var recyclerView: RecyclerView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +27,8 @@ class MainActivity : AppCompatActivity() {
         var db = DatabaseHelper(this)
         tasks = ArrayList()
 
-        btnAddTask = findViewById(R.id.btnAddTask)
+        btnAddTask = find(R.id.btnAddTask)
         edtAddTask = find(R.id.edtAddTask)
-
 
         recyclerView = find(R.id.recView)
         recyclerView.setHasFixedSize(true)
@@ -47,25 +43,11 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
         }
 
-
-
-
-
         btnAddTask.setOnClickListener {
             addTaskToView(db)
         }
 
-
-
     }
-
-
-
-
-
-
-
-
 
 
     fun addTaskToView(db: DatabaseHelper) {
@@ -86,32 +68,31 @@ class MainActivity : AppCompatActivity() {
             edtAddTask.setText("")
         }
 
-
     }
-
-
 
     fun setRecyclerViewItemTouchListener(){
 
         val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
 
             override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
-
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
 
                 val position = viewHolder?.adapterPosition
                 var adapter = MyAdapter(this@MainActivity, tasks , recyclerView )
                 adapter.deleteRowAndTask(viewHolder?.itemView)
 
+
+                recyclerView.adapter.notifyItemRemoved(position!!)
+                recyclerView.adapter.notifyDataSetChanged()
+                
             }
-
-
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+
+
 
     }
 
