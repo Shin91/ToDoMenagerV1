@@ -11,9 +11,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by Shin on 2018-01-03.
- */
 
 public class MyAdapter extends RecyclerView.Adapter {
 
@@ -72,13 +69,9 @@ public class MyAdapter extends RecyclerView.Adapter {
                 }
             });
 
-
-
         return new MyViewHolder(view);
 
-
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -87,12 +80,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         ((MyViewHolder) holder).mTask.setText(tasks.getTask());
         ((MyViewHolder) holder).mDesc.setText(tasks.getDescription());
 
-
-
     }
-
-
-
 
     @Override
     public int getItemCount() {
