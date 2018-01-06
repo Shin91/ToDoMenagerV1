@@ -41,8 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         mTasks = pTasks;
         mRecyclerView = pRecyclerView;
     }
-
-
+    
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
 
