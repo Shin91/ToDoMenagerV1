@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -39,20 +40,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
 
+        setRecyclerViewItemTouchListener()
 
         if (db.getTaskCount() > 0) {
             tasks = db.getAllTasks()
             recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
         }
 
-/*
-        val swipeHandler = object : SwipeToDeleteCallback(this) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = recyclerView.adapter as MyAdapter
 
-                adapter.deleteRowAndTask(v)
-            }
-        }*/
+
 
 
         btnAddTask.setOnClickListener {
@@ -62,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 
 
 
@@ -94,7 +91,29 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    fun setRecyclerViewItemTouchListener(){
 
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+
+            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
+
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
+
+                val position = viewHolder?.adapterPosition
+                var adapter = MyAdapter(this@MainActivity, tasks , recyclerView )
+                adapter.deleteRowAndTask(viewHolder?.itemView)
+
+            }
+
+
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+    }
 
 }
 
