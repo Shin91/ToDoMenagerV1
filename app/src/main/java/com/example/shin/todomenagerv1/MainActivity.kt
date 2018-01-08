@@ -1,5 +1,6 @@
 package com.example.shin.todomenagerv1
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -7,18 +8,19 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.ImageButton
 import org.jetbrains.anko.find
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     var task: Tasks = Tasks()
 
+    lateinit var imgButton: ImageButton
     lateinit var btnAddTask: Button
     lateinit var tasks: ArrayList<Tasks>
-    private lateinit var edtAddTask: EditText
     private lateinit var recyclerView: RecyclerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,8 @@ class MainActivity : AppCompatActivity() {
         tasks = ArrayList()
 
         btnAddTask = find(R.id.btnAddTask)
-        edtAddTask = find(R.id.edtAddTask)
+        imgButton = find(R.id.imageButton)
+
 
         recyclerView = find(R.id.recView)
         recyclerView.setHasFixedSize(true)
@@ -37,61 +40,58 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
 
         setRecyclerViewItemTouchListener()
+        addTaskToView(db)
 
-        if (db.getTaskCount() > 0) {
-            tasks = db.getAllTasks()
-            recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
-        }
+
 
         btnAddTask.setOnClickListener {
-            addTaskToView(db)
+
+            val intent: Intent = Intent(this, AddTaskActivity::class.java)
+            startActivity(intent)
+
         }
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var db = DatabaseHelper(this)
+        addTaskToView(db)
 
     }
 
 
     fun addTaskToView(db: DatabaseHelper) {
 
-
-        val t1 = edtAddTask.text.toString()
-        if (t1.equals("")) {
-            Toast.makeText(this, "Enter new task first ", Toast.LENGTH_SHORT).show()
-        } else {
-
-            task.task = t1
-            db.addTask(task)
-
+        if (db.getTaskCount() > 0) {
             tasks = db.getAllTasks()
-
             recyclerView.adapter = MyAdapter(this, tasks, recyclerView)
 
-            edtAddTask.setText("")
         }
-
     }
+    fun setRecyclerViewItemTouchListener() {
 
-    fun setRecyclerViewItemTouchListener(){
-
-        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
             override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
                 return false
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
 
                 val position = viewHolder?.adapterPosition
-                var adapter = MyAdapter(this@MainActivity, tasks , recyclerView )
+                var adapter = MyAdapter(this@MainActivity, tasks, recyclerView)
                 adapter.deleteRowAndTask(viewHolder?.itemView)
 
 
                 recyclerView.adapter.notifyItemRemoved(position!!)
                 recyclerView.adapter.notifyDataSetChanged()
-                
+
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
-
 
 
     }

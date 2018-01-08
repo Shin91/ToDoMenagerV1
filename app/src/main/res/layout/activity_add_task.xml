@@ -13,8 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:text="Add Task Title"
-        android:textSize="25dp" />
+        android:text="@string/txt_add_task_title"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -22,9 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/edtTaskTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:text="Add Task Description"
-        android:textSize="25dp" />
+        android:layout_marginTop="25dp"
+        android:text="@string/txt_add_task_desc"
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/edtTaskTitle"
@@ -33,9 +33,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="Task Title"
+        android:hint="@string/edt_Add_Task_hint"
         android:inputType="textMultiLine"
         android:textSize="20sp" />
 
@@ -46,9 +45,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView3"
-        android:layout_marginTop="29dp"
         android:ems="10"
-        android:hint="Add Description"
+        android:hint="@string/edt_add_desc_hint"
         android:inputType="textMultiLine" />
 
     <Button
@@ -56,8 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginBottom="58dp"
-        android:text="Confirm" />
+        android:text="@string/btn_add_task_confirm" />
 
 </RelativeLayout>
