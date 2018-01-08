@@ -6,11 +6,34 @@ public class Tasks {
     private int taskId;
     private String taskTitle;
     private String taskDesc;
+    private int isDone = 0;
 
+
+
+    public void setDone(int done) {
+
+        isDone = done;
+    }
+
+    public int getDone() {
+        return isDone;
+    }
 
     public String getTask() {
 
         return taskTitle;
+    }
+
+    public Tasks(int taskId, int isDone) {
+        this.taskId = taskId;
+        this.isDone = isDone;
+    }
+
+    public Tasks(int taskId, String taskTitle, String taskDesc, int isDone) {
+        this.taskId = taskId;
+        this.taskTitle = taskTitle;
+        this.taskDesc = taskDesc;
+        this.isDone = isDone;
     }
 
     public void setTask(String task) {
@@ -35,6 +58,11 @@ public class Tasks {
         this.taskId = taskId;
     }
 
+    public Tasks(int taskId, String taskTitle, int isDone) {
+        this.taskId = taskId;
+        this.taskTitle = taskTitle;
+        this.isDone = isDone;
+    }
 
     public Tasks() {
     }
@@ -60,9 +88,6 @@ public class Tasks {
         this.taskTitle = title;
         this.taskDesc = desc;
     }
-
-
-
 
 
 }

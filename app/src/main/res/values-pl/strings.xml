@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ToDoMenagerV1</string>
+    <string name="btn_add_task">Dodaj Zadanie</string>
+    <string name="cardView_task_title">Tytuł</string>
+    <string name="cardView_task_desc">Opis</string>
+    <string name="edt_Add_Task_hint">Podaj nowe zadanie</string>
+    <string name="txt_add_task_title">Dodaj Zadanie</string>
+    <string name="txt_add_task_desc">Dodaj Opis </string>
+    <string name="edt_add_desc_hint">Opis</string>
+    <string name="btn_add_task_confirm">Potwierdź</string>
+    <string name="title_activity_add_task">AddTaskActivity</string>
+</resources>

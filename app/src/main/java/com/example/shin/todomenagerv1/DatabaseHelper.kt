@@ -16,13 +16,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
         val ID: String = "ID_"
         val TASK: String = "TASK"
         val DESC: String = "DESC"
+        val IS_DONE: String = "IS_DONE"
     }
 
     val TASK_DATABASE_CREATE =
             "CREATE TABLE if not exists " + TABLE_TASK + "(" +
                     "$ID INTEGER PRIMARY KEY , " +
                     "$TASK TEXT ," +
-                    "$DESC TEXT" +
+                    "$DESC TEXT ," +
+                    "$IS_DONE TEXT" +
                     ")"
 
 
@@ -47,11 +49,28 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
         var values = ContentValues()
 
         values.put(TASK, task.task)
-        //values.put(DESC, task.description)
+        values.put(DESC, task.description)
+        values.put(IS_DONE, 0)
 
 
         db.insert(TABLE_TASK, null, values)
         db.close()
+
+    }
+
+    fun upDateFlag(task: Tasks){
+        val db = this.writableDatabase
+
+        var values = ContentValues()
+
+
+        values.put(IS_DONE, task.done)
+
+
+        db.insert(TABLE_TASK, null, values)
+        db.close()
+
+
 
     }
 
@@ -62,21 +81,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
         val db = this.readableDatabase
         var task: Tasks = Tasks()
 
-        //define a projection that specifies which columns from the database you will actually use
-        //after this query
+
         val projection = arrayOf(ID, TASK)
 
-        //filter results WHERE "column_name" 'value'
-        //here selection is column_name and selectionArgs is value
+
 
         val selection = ID + "=?"
         val selectionArgs = arrayOf(id.toString())
 
-        //the order in which your result needs to be returned
-        val sortOrder: String? = null //pass null if you don't want it to be sorted
 
-        //if passed 5, only 5 will be returned
-        val limit: String? = null // pass null if you don't want it to limit
+        val sortOrder: String? = null
+
+
+        val limit: String? = null
 
         val cursor = db.query(
                 TABLE_TASK,       //Table to query
@@ -95,7 +112,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
                 task = Tasks(
                         cursor.getString(0).toInt(),
                         cursor.getString(1),
-                        cursor.getString(2)
+                        cursor.getString(2),
+                        cursor.getString(3).toInt()
 
                 )
             }
@@ -121,7 +139,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
                     var task = Tasks(
                             cursor.getString(0).toInt(),
                             cursor.getString(1),
-                            cursor.getString(2)
+                            cursor.getString(2),
+                            cursor.getString(3).toInt()
                     )
                     taskList.add(task)
                 } while (cursor.moveToNext())
@@ -144,6 +163,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
         //new values
         val values = ContentValues()
         values.put(TASK, task.task)
+        values.put(IS_DONE , task.done)
 
 
         //updating row
@@ -152,7 +172,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
     }
 
     //Deleting single task
-    fun deleteTask(task: Tasks){
+    fun deleteTask(task: Tasks) {
 
         val db = this.writableDatabase
         db.delete(
@@ -160,7 +180,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
                 TABLE_TASK,    //table name
                 TASK + " =?",   //selection
                 arrayOf(task.task)          // selectionArgs
-                )
+        )
         db.close()
     }
 
@@ -180,8 +200,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
 
         return count
     }
-
-
 
 
 }
