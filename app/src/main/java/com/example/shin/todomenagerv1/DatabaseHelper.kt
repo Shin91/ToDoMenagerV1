@@ -27,18 +27,14 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
                     "$IS_DONE TEXT" +
                     ")"
 
-
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(TASK_DATABASE_CREATE)
     }
 
-
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-
         db.execSQL("DROP TABLE IF EXIST" + TABLE_TASK)
 
         onCreate(db)
-
     }
 
 
@@ -57,55 +53,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
         db.close()
 
     }
-
-    fun upDateFlag(task: Tasks){
-        val db = this.writableDatabase
-
-        var values = ContentValues()
-
-
-        values.put(IS_DONE, task.done)
-
-
-        db.insert(TABLE_TASK, null, values)
-        db.close()
-
-
-
-    }
-
-
-    //get Single task
+    
     fun getTask(id: Int): Tasks {
 
         val db = this.readableDatabase
         var task: Tasks = Tasks()
 
-
         val projection = arrayOf(ID, TASK)
-
-
 
         val selection = ID + "=?"
         val selectionArgs = arrayOf(id.toString())
 
-
         val sortOrder: String? = null
 
-
         val limit: String? = null
-
         val cursor = db.query(
-                TABLE_TASK,       //Table to query
-                projection,         //the columns to return
-                selection,          //the columns to WHERE clause
-                selectionArgs,      //the values for WHERE clause
-                null,       //don't group the rows
-                null,        // don't filter
-                sortOrder,          //the sort Order
-                limit               //don't limit
+                TABLE_TASK,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder,
+                limit
         )
-
         if (cursor != null && cursor.moveToFirst()) {
             cursor.let {
                 cursor.moveToFirst()
@@ -114,11 +85,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3).toInt()
-
                 )
             }
-
         }
+        cursor.close()
         return task
     }
 
@@ -126,7 +96,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
 
         val db = this.readableDatabase
 
-        //SQL query for getting all records from the database
         val selectQuery = "SELECT * FROM " + TABLE_TASK
 
         val cursor = db.rawQuery(selectQuery, null)
@@ -155,38 +124,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "taskData.db"
     }
 
 
-    //updating single task
-    fun uptadeTask(task: Tasks): Int {
+    fun updadeTask(task: Tasks): Int {
 
         val db = this.writableDatabase
 
-        //new values
         val values = ContentValues()
         values.put(TASK, task.task)
-        values.put(IS_DONE , task.done)
+        values.put(IS_DONE, task.done)
 
-
-        //updating row
         return db.update(TABLE_TASK, values, TASK + " =?", arrayOf(task.task))
 
     }
 
-    //Deleting single task
     fun deleteTask(task: Tasks) {
 
         val db = this.writableDatabase
         db.delete(
 
-                TABLE_TASK,    //table name
-                TASK + " =?",   //selection
-                arrayOf(task.task)          // selectionArgs
+                TABLE_TASK,
+                TASK + " =?",
+                arrayOf(task.task)
         )
         db.close()
     }
 
-
-
-    //getting task count
     fun getTaskCount(): Int {
         val db = this.writableDatabase
 

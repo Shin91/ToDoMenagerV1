@@ -3,7 +3,6 @@ package com.example.shin.todomenagerv1;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +14,19 @@ import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter {
 
-    private boolean isSelected;
-
     private Context mContext;
 
     private ArrayList<Tasks> mTasks = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
+    private class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView mTask;
-        public TextView mDesc;
+        private TextView mTask;
+        private TextView mDesc;
         private CardView mcardView;
 
-        public MyViewHolder(final View pItem) {
+        private MyViewHolder(final View pItem) {
             super(pItem);
 
             mTask = pItem.findViewById(R.id.task_title);
@@ -39,10 +34,6 @@ public class MyAdapter extends RecyclerView.Adapter {
             mcardView = pItem.findViewById(R.id.card);
 
         }
-
-
-
-
 
     }
 
@@ -65,7 +56,6 @@ public class MyAdapter extends RecyclerView.Adapter {
                 deleteRowAndTask(view);
                 return true;
             }
-
         });
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         });
 
-
         return new MyViewHolder(view);
-
     }
 
 
@@ -90,12 +78,10 @@ public class MyAdapter extends RecyclerView.Adapter {
         ((MyViewHolder) holder).mTask.setText(tasks.getTask());
         ((MyViewHolder) holder).mDesc.setText(tasks.getDescription());
 
-
     }
 
     @Override
     public int getItemCount() {
-
         return mTasks.size();
     }
 
@@ -130,7 +116,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setSelected(View view ) {
+    public void setSelected(View view) {
 
         DatabaseHelper db = new DatabaseHelper(mContext);
         Tasks task;
@@ -141,20 +127,20 @@ public class MyAdapter extends RecyclerView.Adapter {
 
             if (task.getDone() == 1) {
                 task.setDone(0);
-                db.uptadeTask(task);
+                db.updadeTask(task);
 
                 view.setSelected(false);
                 notifyDataSetChanged();
             } else if (task.getDone() == 0) {
                 task.setDone(1);
-                db.uptadeTask(task);
+                db.updadeTask(task);
 
                 view.setSelected(true);
                 notifyDataSetChanged();
             }
 
 
-            Toast.makeText(mContext, "Task \"" + task.getTask() + "\" has been complete" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Task \"" + task.getTask() + "\" has been complete", Toast.LENGTH_SHORT).show();
 
             db.close();
 
@@ -162,10 +148,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             Toast.makeText(mContext, "cos nie tak ", Toast.LENGTH_SHORT).show();
         }
 
-
-
     }
-
 
 }
 

@@ -12,26 +12,25 @@ import android.widget.ImageButton
 import org.jetbrains.anko.find
 import java.util.*
 
+
 class MainActivity : AppCompatActivity() {
 
-    var task: Tasks = Tasks()
+    private var task: Tasks = Tasks()
 
-    lateinit var imgButton: ImageButton
-    lateinit var btnAddTask: Button
-    lateinit var tasks: ArrayList<Tasks>
+    private lateinit var imgButton: ImageButton
+    private lateinit var btnAddTask: Button
+    private lateinit var tasks: ArrayList<Tasks>
     private lateinit var recyclerView: RecyclerView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var db = DatabaseHelper(this)
+        val db = DatabaseHelper(this)
         tasks = ArrayList()
 
         btnAddTask = find(R.id.btnAddTask)
         imgButton = find(R.id.imageButton)
-
 
         recyclerView = find(R.id.recView)
         recyclerView.setHasFixedSize(true)
@@ -42,21 +41,18 @@ class MainActivity : AppCompatActivity() {
         setRecyclerViewItemTouchListener()
         addTaskToView(db)
 
-
-
         btnAddTask.setOnClickListener {
 
-            val intent: Intent = Intent(this, AddTaskActivity::class.java)
+            val intent = Intent(this, AddTaskActivity::class.java)
             startActivity(intent)
 
         }
-
-
     }
 
     override fun onResume() {
+
         super.onResume()
-        var db = DatabaseHelper(this)
+        val db = DatabaseHelper(this)
         addTaskToView(db)
 
     }
@@ -70,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     fun setRecyclerViewItemTouchListener() {
 
         val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -81,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
 
                 val position = viewHolder?.adapterPosition
-                var adapter = MyAdapter(this@MainActivity, tasks, recyclerView)
+                val adapter = MyAdapter(this@MainActivity, tasks, recyclerView)
                 adapter.deleteRowAndTask(viewHolder?.itemView)
 
 
